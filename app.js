@@ -36,21 +36,18 @@ function renderAll(data) {
     return;
   }
 
-  // 진척률 내림차순 (완료 → 높은 순 → 낮은 순)
-  const sorted = [...(data.stocks || [])].sort(
-    (a, b) => b.progressPct - a.progressPct
-  );
+  // Config_Targets 시트 순서대로 (서버에서 받은 순서 그대로)
+  const stocks = data.stocks || [];
 
-  document.getElementById('stockCount').textContent = `${sorted.length} 종목`;
-  updateLastUpdateTime(data.generatedAt);
+  document.getElementById('stockCount').textContent = `${stocks.length} 종목`;
 
   const container = document.getElementById('stocks');
-  if (sorted.length === 0) {
+  if (stocks.length === 0) {
     container.innerHTML =
       '<div class="loading">Config_Targets 시트에 목표 종목을 입력하세요.</div>';
     return;
   }
-  container.innerHTML = sorted.map(renderCard).join('');
+  container.innerHTML = stocks.map(renderCard).join('');
 }
 
 function renderCard(s) {
@@ -77,7 +74,7 @@ function renderCard(s) {
     <div class="cost-line">
       <div>
         <div class="cost-label">💰 완료까지</div>
-        <div class="cost-detail">${s.remaining}주 × ${formatWon(s.priceKRW)}</div>
+        <div class="cost-detail">${fmtQty(s.remaining)}주 × ${formatWon(s.priceKRW)}</div>
       </div>
       <div class="cost-value">${formatWon(s.remainingCostKRW)}</div>
     </div>
@@ -86,7 +83,7 @@ function renderCard(s) {
   // 남은 주식
   const remainingLine = s.complete
     ? '<div class="count-remaining done">🎉 목표 달성!</div>'
-    : `<div class="count-remaining"><span class="num">${s.remaining}</span>주 남음</div>`;
+    : `<div class="count-remaining"><span class="num">${fmtQty(s.remaining)}</span>주 남음</div>`;
 
   return `
     <div class="${cardClass}">
@@ -107,9 +104,9 @@ function renderCard(s) {
 
       <div class="count-line">
         <div>
-          <span class="count-current">${s.current}</span>
+          <span class="count-current">${fmtQty(s.current)}</span>
           <span class="count-divider">/</span>
-          <span class="count-target">${s.target}<span class="count-unit">주</span></span>
+          <span class="count-target">${fmtQty(s.target)}<span class="count-unit">주</span></span>
         </div>
         ${remainingLine}
       </div>
@@ -117,25 +114,21 @@ function renderCard(s) {
       ${costLine}
 
       <div class="split">
-        <div class="split-item"><span class="ico">🐰</span> Em <span class="qty">${s.wife}</span>주</div>
-        <div class="split-item"><span class="ico">🦊</span> Fabio <span class="qty">${s.husband}</span>주</div>
+        <div class="split-item"><span class="ico">🐰</span> Em <span class="qty">${fmtQty(s.wife)}</span>주</div>
+        <div class="split-item"><span class="ico">🦊</span> Fabio <span class="qty">${fmtQty(s.husband)}</span>주</div>
       </div>
     </div>
   `;
 }
 
 // ─── 3. 유틸 ──────────────────────────────────────────────
-function formatWon(amount) {
-  return '₩' + Math.round(amount || 0).toLocaleString(CONFIG.LOCALE);
+function fmtQty(n) {
+  // 소수점 2자리까지 (3자리에서 반올림)
+  return (Number(n) || 0).toFixed(2);
 }
 
-function updateLastUpdateTime(iso) {
-  if (!iso) return;
-  const date = new Date(iso);
-  const hh = String(date.getHours()).padStart(2, '0');
-  const mm = String(date.getMinutes()).padStart(2, '0');
-  document.getElementById('lastUpdate').innerHTML =
-    `<span class="live-dot"></span>${hh}:${mm}`;
+function formatWon(amount) {
+  return '₩' + Math.round(amount || 0).toLocaleString(CONFIG.LOCALE);
 }
 
 function showError(message) {
