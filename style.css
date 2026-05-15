@@ -126,14 +126,30 @@ body {
 }
 
 /* ─── 로딩/에러 ─── */
-.loading, .error {
+.loading {
   text-align: center;
   padding: 40px var(--pad);
   color: var(--ink-mid);
   font-size: 13px;
 }
+
+.loading-icon {
+  display: block;
+  font-size: 36px;
+  margin-bottom: 10px;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.9); }
+}
+
 .error {
+  text-align: center;
+  padding: 40px var(--pad);
   color: var(--neg);
+  font-size: 13px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
