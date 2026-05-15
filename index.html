@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주식 수집 목표 🎯</title>
+  <meta name="theme-color" content="#0a0a09">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <header class="header">
+      <div class="header-top">
+        <div class="page-title">주식 수집 목표 🎯</div>
+        <a href="https://emilyjeong.github.io/" class="home-btn" aria-label="홈으로">🏠</a>
+      </div>
+      <div class="header-bottom">
+        <div class="page-sub">목표한 종목·수량까지 얼마나 모았나</div>
+        <div class="last-update" id="lastUpdate"><span class="live-dot"></span>--:--</div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-label">
+        <span>By Stock</span>
+        <span class="count" id="stockCount">···</span>
+      </div>
+      <div id="stocks">
+        <div class="loading">불러오는 중...</div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <span class="em">📦 데이터:</span> family_portfolio 시트의 Holdings_Wife + Holdings_Husband에서 자동 합산<br>
+      <span class="em">🎯 목표:</span> Config_Targets 시트에서 종목·수량 관리
+    </div>
+    <div class="footer-note">
+      <span class="em">💰 예상 자금:</span> 남은 주식 × 현재가(원화). 새로고침할 때마다 GOOGLEFINANCE 최신값 반영 (미국 주식 약 20분 지연)
+    </div>
+
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
